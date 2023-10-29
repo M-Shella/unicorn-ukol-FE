@@ -1,16 +1,15 @@
-import React from 'react';
-import './index.css';
+import React from 'react'
+import './index.css'
+import MainNavigation from './navigation/MainNavigation'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
-  return (
-    <div>
-      <header>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-    </div>
-  );
+    return (
+        <>
+            <Toaster position='bottom-left' />
+            <MainNavigation />
+        </>
+    )
 }
 
-export default App;
+export default App
