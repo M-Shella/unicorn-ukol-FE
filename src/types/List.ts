@@ -1,5 +1,10 @@
+import { Product } from './Product'
+import { User } from './User'
+
 export interface List {
-    memberId: number[]
-    id: number
-    listName: string
+    id: string
+    members: User[]
+    owner: User
+    name: string
+    products: Product[]
 }

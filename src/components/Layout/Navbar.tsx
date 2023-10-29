@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { RouteConstants } from '../../navigation/navigation-types'
+import { useUser } from '../../context/UserContext'
 
 const menuItems = [
     {
@@ -12,6 +13,7 @@ const menuItems = [
 const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
     const location = useLocation()
+    const { user } = useUser()
 
     return (
         <nav className='bg-gray-800'>
@@ -30,8 +32,8 @@ const Navbar = () => {
                                             <Link
                                                 key={item.name}
                                                 to={item.to}
-                                                className={`text-white px-3 py-2 rounded-md text-sm font-medium ${
-                                                    isActive ? 'border-b-2 border-white' : ''
+                                                className={` text-white px-3 py-2 rounded-md text-sm font-medium ${
+                                                    isActive ? 'bg-gray-900' : 'bg-gray-800 hover:bg-gray-700'
                                                 }`}
                                             >
                                                 {item.name}
@@ -42,9 +44,11 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div className='hidden md:block'>
-                            <div className='ml-4 flex items-center md:ml-6 text-gray-100'>Matej Sela</div>
+                            <div className='ml-4 flex items-center md:ml-6 text-gray-100'>{user?.name}</div>
                         </div>
                         <div className='-mr-2 flex md:hidden'>
+                            {user?.name}
+
                             <button
                                 type='button'
                                 className='relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
@@ -84,15 +88,20 @@ const Navbar = () => {
             {isMobileMenuOpen && (
                 <div className='border-b border-gray-700 md:hidden'>
                     <div className='space-y-1 px-2 py-3 sm:px-3 '>
-                        {menuItems.map((item) => (
-                            <Link
-                                key={item.name}
-                                to={item.to}
-                                className='bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium'
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
+                        {menuItems.map((item) => {
+                            const isActive = location.pathname === item.to
+                            return (
+                                <Link
+                                    key={item.name}
+                                    to={item.to}
+                                    className={`${
+                                        isActive ? 'bg-gray-900' : 'bg-gray-800 hover:bg-gray-700'
+                                    } text-white block px-3 py-2 rounded-md text-base font-medium`}
+                                >
+                                    {item.name}
+                                </Link>
+                            )
+                        })}
                     </div>
                 </div>
             )}

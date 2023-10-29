@@ -1,5 +1,4 @@
 import React from 'react'
-import toast from 'react-hot-toast'
 import Navbar from './Navbar'
 
 interface LayoutProps {
@@ -7,8 +6,6 @@ interface LayoutProps {
 }
 
 const LayoutWrapper: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
-    const notify = () => toast.success('Here is your toast.')
-
     return (
         <>
             <div className='min-h-full'>
@@ -18,10 +15,7 @@ const LayoutWrapper: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
 
                 <main className='-mt-28'>
                     <div className='mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8'>
-                        <div className='rounded-lg bg-white px-5 py-6 shadow sm:px-6'>
-                            <button onClick={notify}>Make me a toast</button>
-                            {children}
-                        </div>
+                        <div className='rounded-lg bg-white px-5 py-6 shadow sm:px-6'>{children}</div>
                     </div>
                 </main>
             </div>
