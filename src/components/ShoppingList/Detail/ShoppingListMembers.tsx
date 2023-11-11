@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { List } from '../../types/List'
-import Button from '../common/Button'
+import { List } from '../../../types/List'
+import Button from '../../common/Button'
 
 interface ShoppingListMembersProps {
     list: List

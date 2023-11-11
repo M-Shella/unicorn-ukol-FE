@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { List } from '../../types/List'
-import { User } from '../../types/User'
-import { isUserOwnerOfList } from '../../utils/list-utils'
-import Button from '../common/Button'
+import { List } from '../../../types/List'
+import { User } from '../../../types/User'
+import { isUserOwnerOfList } from '../../../utils/list-utils'
+import Button from '../../common/Button'
 
 interface ShoppingListHeaderProps {
     list: List
@@ -106,7 +106,7 @@ export const ShoppingListHeader: React.FC<ShoppingListHeaderProps> = ({
             </div>
 
             <div className='flex gap-3'>
-                Show only resolved
+                Show only unresolved
                 <button
                     type='button'
                     className={`${

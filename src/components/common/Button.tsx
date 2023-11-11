@@ -3,11 +3,12 @@ import React from 'react'
 interface ButtonProps {
     size?: 'sm' | 'md' | 'lg'
     color?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning'
-    onClick?: () => void
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
     disabled?: boolean
     isLoading?: boolean
     className?: string
     children: React.ReactNode
+    type?: 'button' | 'submit' | 'reset'
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -18,6 +19,7 @@ const Button: React.FC<ButtonProps> = ({
     isLoading,
     className,
     children,
+    type = 'button',
 }: ButtonProps) => {
     const sizeClasses = {
         sm: 'px-2 py-1 text-xs font-semibold h-6',
@@ -26,9 +28,9 @@ const Button: React.FC<ButtonProps> = ({
     }
 
     const colorClasses = {
-        primary: 'bg-primary-600 hover:bg-primary-500 focus-visible:outline-primary-600',
-        secondary: 'bg-secondary-600 hover:bg-secondary-500 focus-visible:outline-secondary-600',
-        danger: 'bg-red-600 hover:bg-red-500 focus-visible:outline-red-600 text-white',
+        primary: 'bg-submarine-700 hover:bg-submarine-600 focus-visible:outline-submarine-700 text-gray-100',
+        secondary: 'bg-purple-400 hover:bg-purple-300 focus-visible:outline-purple-400 text-gray-100',
+        danger: 'bg-red-500 hover:bg-red-400 focus-visible:outline-red-500 text-white',
         success: 'bg-green-600 hover:bg-green-500 focus-visible:outline-green-600',
         warning: 'bg-yellow-600 hover:bg-yellow-500 focus-visible:outline-yellow-600',
     }
@@ -39,12 +41,12 @@ const Button: React.FC<ButtonProps> = ({
     const disabledClasses =
         disabled || isLoading
             ? 'opacity-50 cursor-not-allowed'
-            : 'hover:opacity-80 focus-visible:outline-offset-2 focus-visible:outline'
+            : 'hover:opacity-80 focus-visible:outline-offset-2 focus-visible:outline shadow-md'
 
     const buttonClasses = `${sizeClass} ${colorClass} ${disabledClasses} ${className}`
 
     return (
-        <button type='button' className={`rounded ${buttonClasses}`} onClick={onClick} disabled={disabled}>
+        <button type={type} className={`rounded ${buttonClasses}`} onClick={onClick} disabled={disabled}>
             {children}
         </button>
     )

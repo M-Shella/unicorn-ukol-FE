@@ -1,6 +1,6 @@
 import React from 'react'
-import { Product } from '../../types/Product'
-import Button from '../common/Button'
+import { Product } from '../../../types/Product'
+import Button from '../../common/Button'
 
 interface ShoppingListItemProps {
     product: Product
