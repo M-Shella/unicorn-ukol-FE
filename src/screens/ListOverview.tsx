@@ -8,9 +8,11 @@ import toast from 'react-hot-toast'
 import { useShoppingLists } from '../context/ShoppingListContext'
 import ShoppingListCard from '../components/ShoppingList/Overview/ShoppingListCard'
 import Button from '../components/common/Button'
+import ConfirmListDeletion from '../components/ShoppingList/Overview/ConfirmListDeletion'
 
 const ListOverview: React.FC = () => {
-    const [showModal, setShowModal] = useState(false)
+    const [showAddModal, setShowAddModal] = useState(false)
+    const [showDeleteModalForId, setShowDeleteModalForId] = useState('')
     const { user } = useUser()
     const { getListsByUserId, setLists } = useShoppingLists()
     const lists = getListsByUserId(user?.id ?? '')
@@ -32,12 +34,13 @@ const ListOverview: React.FC = () => {
         }
 
         setLists([...lists, newList])
-        setShowModal(false)
+        setShowAddModal(false)
         toast.success('List created')
     }
 
     const handleDeleteList = (listId: string) => {
         setLists(lists.filter((list) => list.id !== listId))
+        setShowDeleteModalForId('')
         toast.success('List deleted')
     }
 
@@ -45,7 +48,7 @@ const ListOverview: React.FC = () => {
         <div className='flex flex-col gap-3 p-4'>
             <div className='flex justify-between'>
                 <h2 className='text-2xl font-semibold'>Your lists</h2>
-                <Button size='lg' color='primary' onClick={() => setShowModal(true)}>
+                <Button size='lg' color='primary' onClick={() => setShowAddModal(true)}>
                     Add New List
                 </Button>
             </div>
@@ -55,15 +58,24 @@ const ListOverview: React.FC = () => {
                     <ShoppingListCard
                         key={list.id}
                         list={list}
-                        onDeleteList={handleDeleteList}
+                        onDeleteList={() => setShowDeleteModalForId(list.id)}
                         isOwner={list.owner.id === user?.id}
                     />
                 ))}
             </div>
 
-            {showModal && (
-                <Modal onClose={() => setShowModal(false)}>
-                    <AddShoppingListForm onFormSubmit={handleAddList} onClose={() => setShowModal(false)} />
+            {showAddModal && (
+                <Modal onClose={() => setShowAddModal(false)}>
+                    <AddShoppingListForm onFormSubmit={handleAddList} onClose={() => setShowAddModal(false)} />
+                </Modal>
+            )}
+
+            {showDeleteModalForId && (
+                <Modal onClose={() => setShowDeleteModalForId('')}>
+                    <ConfirmListDeletion
+                        onConfirmDeletion={() => handleDeleteList(showDeleteModalForId)}
+                        onClose={() => setShowDeleteModalForId('')}
+                    />
                 </Modal>
             )}
         </div>
