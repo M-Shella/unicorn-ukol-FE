@@ -3,6 +3,7 @@ import { RouteConstants } from '../../../navigation/navigation-types'
 import { List } from '../../../types/List'
 import Button from '../../common/Button'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 interface ShoppingListCardProps {
     list: List
@@ -12,6 +13,7 @@ interface ShoppingListCardProps {
 
 const ShoppingListCard: React.FC<ShoppingListCardProps> = ({ list, onDeleteList, isOwner }) => {
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const handleCardClick = () => {
         navigate(RouteConstants.list + '/' + list.id)
@@ -32,12 +34,14 @@ const ShoppingListCard: React.FC<ShoppingListCardProps> = ({ list, onDeleteList,
             <div className='flex-1 min-w-0'>
                 <h3 className='text-lg font-semibold truncate'>{list.name}</h3>
                 {isOwner && (
-                    <span className='text-xs font-semibold bg-green-500 rounded-full px-2 py-1 text-gray-100'>Owner</span>
+                    <span className='text-xs font-semibold bg-green-500 rounded-full px-2 py-1 text-gray-100'>
+                        {t('users.owner')}
+                    </span>
                 )}
             </div>
             <div className='flex-shrink-0 flex items-center gap-2'>
                 <Button onClick={(e) => handleDeleteClick(e)} color='danger'>
-                    Delete
+                    {t('common.delete')}
                 </Button>
             </div>
         </div>

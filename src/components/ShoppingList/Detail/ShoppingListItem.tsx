@@ -1,6 +1,7 @@
 import React from 'react'
 import { Product } from '../../../types/Product'
 import Button from '../../common/Button'
+import { useTranslation } from 'react-i18next'
 
 interface ShoppingListItemProps {
     product: Product
@@ -13,12 +14,18 @@ export const ShoppingListItem: React.FC<ShoppingListItemProps> = ({
     onRemoveItem,
     onMarkItemAsResolved,
 }: ShoppingListItemProps) => {
+    const { t } = useTranslation()
+
     return (
-        <li className={`flex justify-between gap-x-6 p-3 ${product.isResolved ? 'bg-indigo-50' : ''}`}>
+        <li
+            className={`flex justify-between gap-x-6 p-3 ${
+                product.isResolved ? 'bg-indigo-50 dark:bg-gray-800' : 'dark:bg-gray-700'
+            }`}
+        >
             <div className={`flex min-w-0 gap-x-4 ${product.isResolved && 'line-through text-gray-400'}`}>{product.name}</div>
-            <div className='hidden shrink-0 sm:flex  sm:items-end'>
+            <div className='shrink-0 flex items-end'>
                 <Button size='sm' color='danger' onClick={() => onRemoveItem(product.id)}>
-                    Delete
+                    {t('common.delete')}
                 </Button>
                 <div className='ml-3 flex h-6 items-center'>
                     <input

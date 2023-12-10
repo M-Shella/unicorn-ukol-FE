@@ -2,23 +2,29 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { RouteConstants } from '../../navigation/navigation-types'
 import { useUser } from '../../context/UserContext'
+import LanguageSwitcher from '../common/LanguageSwitcher'
+import { useTranslation } from 'react-i18next'
+import DarkModeToggle from '../common/DarkModeToggle'
 
 const menuItems = [
     {
-        name: 'Home',
+        name: 'home',
         to: RouteConstants.home,
     },
 ]
+
+const translationPrefix = 'navbar.'
 
 const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
     const location = useLocation()
     const { user } = useUser()
+    const { t } = useTranslation()
 
     return (
-        <nav className='bg-gray-800'>
+        <nav className=' dark:bg-gray-800 bg-gray-50'>
             <div className='mx-auto max-w-7xl sm:px-6 lg:px-8'>
-                <div className='border-b border-gray-700'>
+                <div className=''>
                     <div className='flex h-16 items-center justify-between px-4 sm:px-0'>
                         <div className='flex items-center'>
                             <div className='flex-shrink-0 text-3xl'>
@@ -32,11 +38,13 @@ const Navbar = () => {
                                             <Link
                                                 key={item.name}
                                                 to={item.to}
-                                                className={` text-white px-3 py-2 rounded-md text-sm font-medium ${
-                                                    isActive ? 'bg-gray-900' : 'bg-gray-800 hover:bg-gray-700'
+                                                className={`text-gray-900 dark:text-white px-3 py-2 rounded-md text-sm font-medium ${
+                                                    isActive
+                                                        ? 'dark:bg-gray-900 bg-gray-300'
+                                                        : 'dark:bg-gray-800 dark:hover:bg-gray-700 bg-gray-50 hover:bg-gray-200'
                                                 }`}
                                             >
-                                                {item.name}
+                                                {t(translationPrefix + item.name)}
                                             </Link>
                                         )
                                     })}
@@ -44,11 +52,16 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div className='hidden md:block'>
-                            <div className='ml-4 flex items-center md:ml-6 text-gray-100'>{user?.name}</div>
+                            <div className='ml-4 flex items-center md:ml-6 dark:text-gray-100 text-gray-800 gap-3'>
+                                <DarkModeToggle />
+                                <LanguageSwitcher />
+                                {user?.name}
+                            </div>
                         </div>
-                        <div className='-mr-2 flex md:hidden'>
-                            {user?.name}
-
+                        <div className='-mr-2 flex md:hidden gap-3 items-center'>
+                            <DarkModeToggle />
+                            <LanguageSwitcher />
+                            <p className='text-gray-100'>{user?.name}</p>
                             <button
                                 type='button'
                                 className='relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
@@ -98,7 +111,7 @@ const Navbar = () => {
                                         isActive ? 'bg-gray-900' : 'bg-gray-800 hover:bg-gray-700'
                                     } text-white block px-3 py-2 rounded-md text-base font-medium`}
                                 >
-                                    {item.name}
+                                    {t(translationPrefix + item.name)}
                                 </Link>
                             )
                         })}

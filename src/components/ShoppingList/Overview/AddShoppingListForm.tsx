@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import Input from '../../common/Input'
 import Button from '../../common/Button'
+import { useTranslation } from 'react-i18next'
 
 interface FormValues {
     listName: string
@@ -12,8 +13,11 @@ interface AddShoppingListFormProps {
     onClose: () => void
 }
 
+const translationPrefix = 'lists.'
+
 const AddShoppingListForm: React.FC<AddShoppingListFormProps> = ({ onFormSubmit, onClose }) => {
     const { register, handleSubmit, reset } = useForm<FormValues>()
+    const { t } = useTranslation()
 
     const onSubmit = (data: FormValues) => {
         onFormSubmit(data)
@@ -23,9 +27,14 @@ const AddShoppingListForm: React.FC<AddShoppingListFormProps> = ({ onFormSubmit,
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Input label='List Name' name='listName' register={register} placeholder='Enter list name' />
+            <Input
+                label={t(translationPrefix + 'name')}
+                name='listName'
+                register={register}
+                placeholder={t(translationPrefix + 'enterName')}
+            />
             <Button type='submit' className='w-full my-3' size='lg'>
-                Add List
+                {t(translationPrefix + 'add')}
             </Button>
         </form>
     )

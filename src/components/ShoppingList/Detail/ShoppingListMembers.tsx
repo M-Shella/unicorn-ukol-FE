@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { List } from '../../../types/List'
 import Button from '../../common/Button'
+import { useTranslation } from 'react-i18next'
 
 interface ShoppingListMembersProps {
     list: List
@@ -14,6 +15,7 @@ export const ShoppingListMembers: React.FC<ShoppingListMembersProps> = ({
     onRemoveMemberFromList,
 }: ShoppingListMembersProps) => {
     const [newMemberName, setNewMemberName] = useState('')
+    const { t } = useTranslation()
 
     const handleAddMemberToList = () => {
         onAddMemberToList(newMemberName)
@@ -21,7 +23,7 @@ export const ShoppingListMembers: React.FC<ShoppingListMembersProps> = ({
     }
     return (
         <div className='mt-12'>
-            <h2 className='text-xl'>Members</h2>
+            <h2 className='text-xl'>{t('users.members')}</h2>
             <div className='flex gap-3'>
                 <input
                     className='
@@ -37,13 +39,13 @@ export const ShoppingListMembers: React.FC<ShoppingListMembersProps> = ({
                     value={newMemberName}
                     onChange={(e) => setNewMemberName(e.target.value)}
                 />
-                <button onClick={handleAddMemberToList}>Add member</button>
+                <button onClick={handleAddMemberToList}>{t('users.add')}</button>
             </div>
             {list.members.map((member) => (
                 <div key={member.id}>
                     {member.name}
                     <Button size='sm' color='danger' onClick={() => onRemoveMemberFromList(member.id)}>
-                        Delete
+                        {t('common.delete')}
                     </Button>
                 </div>
             ))}

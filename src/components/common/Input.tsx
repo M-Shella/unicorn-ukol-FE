@@ -12,7 +12,7 @@ interface InputProps {
 const Input: React.FC<InputProps> = ({ label, name, placeholder, register, className }) => {
     return (
         <div>
-            <label htmlFor={name} className='ml-px block pl-4 text-sm font-medium leading-6 text-gray-900'>
+            <label htmlFor={name} className='ml-px block pl-4 text-sm font-medium leading-6 text-gray-900 dark:text-gray-100 '>
                 {label}
             </label>
             <div className='mt-2'>

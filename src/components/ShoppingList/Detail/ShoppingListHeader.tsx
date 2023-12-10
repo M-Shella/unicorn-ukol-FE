@@ -3,6 +3,7 @@ import { List } from '../../../types/List'
 import { User } from '../../../types/User'
 import { isUserOwnerOfList } from '../../../utils/list-utils'
 import Button from '../../common/Button'
+import { useTranslation } from 'react-i18next'
 
 interface ShoppingListHeaderProps {
     list: List
@@ -13,6 +14,9 @@ interface ShoppingListHeaderProps {
     onRemoveMemberFromList: (id: string) => void
     setShowOnlyResolved: (showOnlyResolved: boolean) => void
 }
+
+const translationPrefixLists = 'lists.'
+const translationPrefixProducts = 'products.'
 
 export const ShoppingListHeader: React.FC<ShoppingListHeaderProps> = ({
     user,
@@ -27,6 +31,7 @@ export const ShoppingListHeader: React.FC<ShoppingListHeaderProps> = ({
     const [isEditingListName, setIsEditingListName] = useState(false)
     const [newItemName, setNewItemName] = useState('')
     const inputRef = useRef<HTMLInputElement>(null)
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (isEditingListName) {
@@ -77,13 +82,13 @@ export const ShoppingListHeader: React.FC<ShoppingListHeaderProps> = ({
                                     }
                                 }}
                             >
-                                {isEditingListName ? 'Confirm' : 'Edit'}
+                                {isEditingListName ? t('common.confirm') : t('common.edit')}
                             </Button>
                         )}
                     </h1>
                 </div>
                 <Button color='danger' onClick={() => onRemoveMemberFromList(user?.id ?? '')}>
-                    Leave list
+                    {t(translationPrefixLists + 'leave')}
                 </Button>
             </div>
             <div className='flex gap-3'>
@@ -100,13 +105,13 @@ export const ShoppingListHeader: React.FC<ShoppingListHeaderProps> = ({
                     type='text'
                     value={newItemName}
                     onChange={(e) => setNewItemName(e.target.value)}
-                    placeholder='Product name'
+                    placeholder={t(translationPrefixProducts + 'name')}
                 />
-                <button onClick={handleAddItem}>Add product</button>
+                <button onClick={handleAddItem}>{t(translationPrefixProducts + 'add')}</button>
             </div>
 
             <div className='flex gap-3'>
-                Show only unresolved
+                {t(translationPrefixProducts + 'showUnresolved')}
                 <button
                     type='button'
                     className={`${
@@ -116,7 +121,7 @@ export const ShoppingListHeader: React.FC<ShoppingListHeaderProps> = ({
                     aria-checked={showOnlyResolved}
                     onClick={() => setShowOnlyResolved(!showOnlyResolved)}
                 >
-                    <span className='sr-only'>Show only resolved</span>
+                    <span className='sr-only'>{t(translationPrefixProducts + 'showResolved')}</span>
                     <span
                         aria-hidden='true'
                         className={`${

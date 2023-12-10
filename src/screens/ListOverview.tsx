@@ -9,6 +9,9 @@ import { useShoppingLists } from '../context/ShoppingListContext'
 import ShoppingListCard from '../components/ShoppingList/Overview/ShoppingListCard'
 import Button from '../components/common/Button'
 import ConfirmListDeletion from '../components/ShoppingList/Overview/ConfirmListDeletion'
+import { useTranslation } from 'react-i18next'
+
+const translationPrefix = 'lists.'
 
 const ListOverview: React.FC = () => {
     const [showAddModal, setShowAddModal] = useState(false)
@@ -16,12 +19,13 @@ const ListOverview: React.FC = () => {
     const { user } = useUser()
     const { getListsByUserId, setLists } = useShoppingLists()
     const lists = getListsByUserId(user?.id ?? '')
+    const { t } = useTranslation()
 
     const handleAddList = (newListData: { listName: string }) => {
         const newId = `list-${new Date().getTime()}`
 
         if (!user) {
-            toast.error('You need to be logged in to create a new list')
+            toast.error(t(translationPrefix + 'unLogged'))
             return
         }
 
@@ -35,21 +39,21 @@ const ListOverview: React.FC = () => {
 
         setLists([...lists, newList])
         setShowAddModal(false)
-        toast.success('List created')
+        toast.success(t(translationPrefix + 'created'))
     }
 
     const handleDeleteList = (listId: string) => {
         setLists(lists.filter((list) => list.id !== listId))
         setShowDeleteModalForId('')
-        toast.success('List deleted')
+        toast.success(t(translationPrefix + 'deleted'))
     }
 
     return (
         <div className='flex flex-col gap-3 p-4'>
             <div className='flex justify-between'>
-                <h2 className='text-2xl font-semibold'>Your lists</h2>
+                <h2 className='text-2xl font-semibold dark:text-gray-100'>{t(translationPrefix + 'yourLists')}</h2>
                 <Button size='lg' color='primary' onClick={() => setShowAddModal(true)}>
-                    Add New List
+                    {t(translationPrefix + 'addList')}
                 </Button>
             </div>
 

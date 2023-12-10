@@ -8,6 +8,11 @@ import { User } from '../types/User'
 import { isUserMemberOfList, isUserOwnerOfList } from '../utils/list-utils'
 import ShoppingListMembers from '../components/ShoppingList/Detail/ShoppingListMembers'
 import { useShoppingLists } from '../context/ShoppingListContext'
+import { useTranslation } from 'react-i18next'
+
+const translationPrefixLists = 'lists.'
+const translationPrefixProducts = 'products.'
+const translationPrefixUsers = 'users.'
 
 const ListDetail = () => {
     const { id } = useParams()
@@ -15,9 +20,10 @@ const ListDetail = () => {
     const { getListById, updateList } = useShoppingLists()
     const list = getListById(id ?? '')
     const [showOnlyResolved, setShowOnlyResolved] = useState(false)
+    const { t } = useTranslation()
 
     if (!list || !id) {
-        return <div>List not found</div>
+        return <div>{t(translationPrefixLists + 'notFound')}</div>
     }
 
     const displayedList = showOnlyResolved
@@ -25,16 +31,16 @@ const ListDetail = () => {
         : list
 
     if (!user) {
-        return <div>Please login to view this list</div>
+        return <div>{t(translationPrefixLists + 'pleaseLogin')}</div>
     }
 
     if (!isUserMemberOfList(list, user.id) && !isUserOwnerOfList(list, user.id))
-        return <div>You are not a member of this list</div>
+        return <div>{t(translationPrefixLists + 'notMember')}</div>
 
     const onRemoveItem = (id: string) => {
         const newList = { ...list, products: list.products.filter((product) => product.id !== id) }
         updateList(id, newList)
-        toast.success('Item removed from list')
+        toast.success(t(translationPrefixProducts + 'removed'))
     }
 
     const onMarkItemAsResolved = (productId: string) => {
@@ -48,13 +54,13 @@ const ListDetail = () => {
             }),
         }
         updateList(id, newList)
-        toast.success('Item mark status changed')
+        toast.success(t(translationPrefixProducts + 'statusChanged'))
     }
 
     const onAddItem = (name: string) => {
         const newList = { ...list, products: [...list.products, { id: Date.now().toString(), name, isResolved: false }] }
         updateList(id, newList)
-        toast.success('Item added to list')
+        toast.success(t(translationPrefixProducts + 'added'))
     }
 
     const onAddMemberToList = (newMemberName: string) => {
@@ -64,24 +70,24 @@ const ListDetail = () => {
         }
         const newList = { ...list, members: [...list.members, newMember] }
         updateList(id, newList)
-        toast.success('User added to list')
+        toast.success(t(translationPrefixUsers + 'added'))
     }
 
     const onRemoveMemberFromList = (id: string) => {
         const newList = { ...list, members: list.members.filter((member) => member.id !== id) }
         updateList(id, newList)
-        toast.success('User removed from list')
+        toast.success(t(translationPrefixUsers + 'removed'))
     }
 
     const onRenameList = (newListName: string) => {
         if (list && newListName !== '') {
             updateList(id, { ...list, name: newListName })
-            toast.success('List renamed')
+            toast.success(t(translationPrefixLists + 'renamed'))
         }
     }
 
     return (
-        <div>
+        <div className='dark:text-gray-100'>
             <ShoppingListHeader
                 list={list}
                 user={user}
