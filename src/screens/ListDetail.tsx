@@ -9,6 +9,8 @@ import { isUserMemberOfList, isUserOwnerOfList } from '../utils/list-utils'
 import ShoppingListMembers from '../components/ShoppingList/Detail/ShoppingListMembers'
 import { useShoppingLists } from '../context/ShoppingListContext'
 import { useTranslation } from 'react-i18next'
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts'
+import { v4 as uuidv4 } from 'uuid'
 
 const translationPrefixLists = 'lists.'
 const translationPrefixProducts = 'products.'
@@ -39,7 +41,7 @@ const ListDetail = () => {
 
     const onRemoveItem = (id: string) => {
         const newList = { ...list, products: list.products.filter((product) => product.id !== id) }
-        updateList(id, newList)
+        updateList(list.id, newList)
         toast.success(t(translationPrefixProducts + 'removed'))
     }
 
@@ -58,14 +60,14 @@ const ListDetail = () => {
     }
 
     const onAddItem = (name: string) => {
-        const newList = { ...list, products: [...list.products, { id: Date.now().toString(), name, isResolved: false }] }
+        const newList = { ...list, products: [...list.products, { id: uuidv4(), name, isResolved: false }] }
         updateList(id, newList)
         toast.success(t(translationPrefixProducts + 'added'))
     }
 
     const onAddMemberToList = (newMemberName: string) => {
         const newMember: User = {
-            id: Date.now().toString(),
+            id: uuidv4(),
             name: newMemberName,
         }
         const newList = { ...list, members: [...list.members, newMember] }
@@ -75,7 +77,7 @@ const ListDetail = () => {
 
     const onRemoveMemberFromList = (id: string) => {
         const newList = { ...list, members: list.members.filter((member) => member.id !== id) }
-        updateList(id, newList)
+        updateList(list.id, newList)
         toast.success(t(translationPrefixUsers + 'removed'))
     }
 
@@ -85,6 +87,16 @@ const ListDetail = () => {
             toast.success(t(translationPrefixLists + 'renamed'))
         }
     }
+
+    const resolvedItemsCount = list.products.filter((p) => p.isResolved).length
+    const unresolvedItemsCount = list.products.length - resolvedItemsCount
+
+    const data = [
+        { name: t(translationPrefixProducts + 'resolved'), value: resolvedItemsCount },
+        { name: t(translationPrefixProducts + 'unResolved'), value: unresolvedItemsCount },
+    ]
+
+    const COLORS = ['#0088FE', '#FFBB28']
 
     return (
         <div className='dark:text-gray-100'>
@@ -111,6 +123,16 @@ const ListDetail = () => {
                     onRemoveMemberFromList={onRemoveMemberFromList}
                 />
             )}
+
+            <PieChart width={400} height={400}>
+                <Pie data={data} cx={200} cy={200} outerRadius={80} fill='#8884d8' dataKey='value' label>
+                    {data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+            </PieChart>
         </div>
     )
 }

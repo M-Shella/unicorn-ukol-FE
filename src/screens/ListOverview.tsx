@@ -1,4 +1,3 @@
-// ShoppingListOverview.tsx
 import React, { useState } from 'react'
 import { List } from '../types/List'
 import Modal from '../components/common/Modal'
@@ -10,6 +9,7 @@ import ShoppingListCard from '../components/ShoppingList/Overview/ShoppingListCa
 import Button from '../components/common/Button'
 import ConfirmListDeletion from '../components/ShoppingList/Overview/ConfirmListDeletion'
 import { useTranslation } from 'react-i18next'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 
 const translationPrefix = 'lists.'
 
@@ -48,6 +48,11 @@ const ListOverview: React.FC = () => {
         toast.success(t(translationPrefix + 'deleted'))
     }
 
+    const chartData = lists.map((list) => ({
+        name: list.name,
+        items: list.products.length,
+    }))
+
     return (
         <div className='flex flex-col gap-3 p-4'>
             <div className='flex justify-between'>
@@ -82,6 +87,25 @@ const ListOverview: React.FC = () => {
                     />
                 </Modal>
             )}
+
+            <BarChart
+                width={600}
+                height={300}
+                data={chartData}
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                }}
+            >
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='name' />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey='items' fill='#8884d8' />
+            </BarChart>
         </div>
     )
 }

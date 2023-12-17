@@ -26,6 +26,8 @@ const en = {
         removed: 'Item removed from list',
         added: 'Item added to list',
         statusChanged: 'Item mark status changed',
+        resolved: 'Resolved',
+        unResolved: 'Unresolved',
     },
     users: {
         removed: 'User removed from list',

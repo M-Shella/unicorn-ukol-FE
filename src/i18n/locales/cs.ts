@@ -26,6 +26,8 @@ const cs = {
         removed: 'Produkt odebrán ze seznamu',
         added: 'Produkt přidán do seznamu',
         statusChanged: 'Stav produktu změněn',
+        resolved: 'Vyřešené',
+        unResolved: 'Nevyřešené',
     },
     users: {
         removed: 'Uživatel odebrán ze seznamu',
